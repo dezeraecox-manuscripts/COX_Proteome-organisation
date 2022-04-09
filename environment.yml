@@ -1,16 +1,42 @@
-name: env_name
-
+name: organisation
 channels:
-- defaults
-- conda-forge
-
+  - conda-forge
+  - bioconda
+  - schrodinger
+  - biobuilds
+  - defaults
 dependencies:
+  - python==3.8.2
+  - xlrd==1.2.0
+  - xlsxwriter==1.2.9
+  - numpy==1.19.1
+  - biopython==1.77
+  - fuzzywuzzy==0.17.0
+  - pandas==1.0.5
+  - scipy==1.5.0
+  - setuptools==49.2.0
+  - pykalman
+  - obonet==0.2.3
+  - pip==20.1.1
+  - scikit-fuzzy
+  - scikit-learn==0.23.1
   - seaborn
-  - scipy
-  - matplotlib
-  - numpy
-  - pandas
-  - ipython
+  - statsmodels==0.11.1
+  - urllib3==1.25.10
+  - hdbscan==0.8.26
+  - ipython==7.16.1
+  - phylopandas==0.8.0=py_0
+  - requests==2.24.0
+  - ipykernel
+  - pymol
+  - autopep8
+  - upsetplot
+  - scikit-posthocs
+  - networkx
   - loguru
+  - snakemake
   - pip:
-    - lmfit
+    - xmltodict
+    - py4cytoscape
+    - git+https://github.com/dezeraecox/GEN_Utils.git
+
