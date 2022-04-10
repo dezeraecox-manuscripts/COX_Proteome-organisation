@@ -1,48 +1,46 @@
-# Public repository template for scientific manuscripts
+[![DOI](https://zenodo.org/badge/..../.svg)](https://doi.org/###/zenodo.###)
 
-This repository contains a collection of templates designed to ease the creation of public-facing code and data repositories for scientific manuscripts. The templates provided are geared toward python-directed computational analyses of biological datasets, but could be adapted to suit other purposes at the users discretion.
+# COX_Proteome-organisation
 
-### Before you start: External repositories for storing raw data collections *(optional)*
+This repository contains the analysis code associated with the Proteome Organisation project, led by Dr. Dezerae Cox. This manuscript has been submitted for publication under the title *Protein painting reveals pervasive remodeling of conserved proteostasis machinery in response to pharmacological stimuli*.
 
-Many disciplines maintain technique-specific repositories for all raw data associated with published manuscripts, for example the PRIDE repository housing raw mass spectrometry data. It is recommended to use these repositories in the first instance, and usage instructions given by the provider should be followed. In most cases, these databases will generate a unique identifier or DOI which can then be linked in the accompanying repository here. For example, space is provided for PRIDE identifiers for mass spectrometry data etc.
+This manuscript has been submitted as a preprint via BioRxiv [here](biorxiv/link). A link to the final version will be provided upon publication.
 
-In the case of no specific repositories being available, general-use examples include [FigShare](https://figshare.com/) and [Zenodo](https://zenodo.org/). Both accept raw dataset submissions, generate a DOI and provide long-term public managed access to your dataset.
+## Prerequisites
 
-Once any external data respository DOI's have been generated, proceed to editing this repository which will house your analysis scripts.
+This analysis assumes a standard installation of Python 3 (=> 3.8). For specific package requirements, see the environment.yml file, or  create a new conda environment containing all packages by running ```conda create -f environment.yml```. To complete the network mapping elements of the workflow, an installation of [Cytoscape (v3.9.0)](https://cytoscape.org/download.html) is also required. In addition to the analysis contained here, some simple statistical tests were performed using [GraphPad Prism v **8.0**](https://www.graphpad.com/scientific-software/prism/).
 
-## Getting started
----
+## Raw data
 
-### 1. Clone the template repository
+The .RAW files have been deposited via the [PRIDE][1]<sup>[1]</sup> partner repository to the [ProteomeXchange Consortium][2]<sup>[2]</sup> under the dataset identifier PXD######. For convenience, the preprocessed identification and quantitation data have also been uploaded alongside the exported flow cytometry data (hereon termed raw data) as an open-access [Zenodo dataset](https://doi.org/###/zenodo.###). These data can be collected automatically using the ```raw_data.py``` script in each of the respective ```src``` analysis folders.
 
-To use this repository, first clone the repository using the ```Use this template``` button, and check the box to include all branches. It is recommended to title the repository using the *AUTHOR_Running-title syntax* for ease of use and access.
+Various public databases were also queried as cited in the accompanying manuscript, for which access protocols are provided in the respective ```utilities``` scripts where appropriate.
 
-### 2. Select your template branch
+## Workflow
 
-Once cloned, find your template of interest (currently provided are *general*, *image-analysis* and *mass-spectrometry* examples) by inspecting each of the relevant branches, and generate a pull request to merge these changes into the ```main``` branch. Optionally, you may also remove the remaining template branches using ```git branch -d BranchName``` (delete local branch) and ```git push origin --delete BranchName``` (delete the remote version) for each of the unused branches.
+Initial processing of the novel mass spectrometry spectra files was completed using [MaxQuant][3]<sup>[3]</sup> (v1.6.2.10).
 
-### 3. Add components
+Individual analyses are presented within the ```src``` folder. Where processing order is important for individual analyses, scripts have been numbered and should be run in order before unnumbered counterparts. To run the complete analysis, a ```snakefile``` has also been provided. This can be run at the command line from the root directory using ```snakemake -p --cores 1```. Note, however, that Cytoscape must be running to enable access from the command line and that the generated networks should be cleared between the two different cytoscape plotting scripts. Alternatively, these elements of the workflow can be addressed manually.
 
-Add your codebase under the ```src``` folder and example data to the ```data``` folder. An optional ```utilities``` folder is also provided to house scripts that are accessed via relative imports in the ```src``` files. 
+### A quick note on cluster numbers
 
-Add your environment file (an [environment.yml](environment.yml) example is provided), including relevant version constraints. For example, an environment file containing only the components explicitly installed in a conda environment can be generated using the command ```conda env export --from-history```.
+The assigned number during the community clustering is stochastic (as it is unsupervised, the cluster centres can be initialised in a randomized order). However, the proteins associated to each cluster should be conserved. Therefore, cluster numbers were manually mapped to the order presented in the manuscript within the analysis workflow.
 
-Check (or replace) the [license](LICENSE) file, and ensure that it provides appropriate permissions for anyone wishing to repurpose your codebase/dataset. 
+### A quick note on database and enrichment analyses
 
-Finally, check (or replace) the [.gitignore](.gitignore) file. A standard python version is provided.
-### 4. Edit the README
+Where necessary, some analyses presented in this workflow make live calls to an existing API at the time of running. In particular, the enrichment analyses use [PantherDB](http://www.pantherdb.org/) online. Therefore, there may be subtle differences in the returned GO term lists resulting from any version updates. The analyses obtained via API presented in the paper used PANTHER v16.0 and UniProt v2021_03.
 
-In the newly-updated main branch (after merging your template branch of interest), the [README](README.md) will update to the relevant front matter. Edit this file to reflect your manuscript details, and include a summary of the workflow(s) to be contained within the repository.
 
-Some commonly-used references are provided in each template, as well as an example table for providing detailed workflow descriptions. Alternatively, users familiar with python may wish to try a specific workflow management method, such as [SnakeMake](https://snakemake.readthedocs.io/en/stable/) or [YAWL](https://yawlfoundation.github.io/).
+## References
 
-### 5. RECOMMENDED: Zenodo repository for code archive and DOI creation
+[1]: https://www.ebi.ac.uk/pride/archive/
 
-In addition to providing publically-accessible code via this GitHub repository, services such as [FigShare](https://figshare.com/) and [Zenodo](https://zenodo.org/) can connect with GitHub to generate archived and versioned copies of individual repositories. Using this integration, it is then possible to generate a DOI which can be included in your manuscript to point to the accompanying codebase here.
+1. Perez-Riverol, Yasset, Attila Csordas, Jingwen Bai, Manuel Bernal-Llinares, Suresh Hewapathirana, Deepti J Kundu, Avinash Inuganti, et al. “The PRIDE Database and Related Tools and Resources in 2019: Improving Support for Quantification Data.” Nucleic Acids Research 47, no. D1 (January 8, 2019): D442–50. https://doi.org/10.1093/nar/gky1106.
 
- It is recommended to do this once editing your cloned version of this repository is complete, and space is provided at the top of the README in each template to house the associated repository badges.
+[2]: http://proteomecentral.proteomexchange.org
 
-## Disclaimer
----
+2. Deutsch, Eric W., Attila Csordas, Zhi Sun, Andrew Jarnuczak, Yasset Perez-Riverol, Tobias Ternent, David S. Campbell, et al. “The ProteomeXchange Consortium in 2017: Supporting the Cultural Change in Proteomics Public Data Deposition.” Nucleic Acids Research 45, no. Database issue (January 4, 2017): D1100–1106. https://doi.org/10.1093/nar/gkw936.
 
-*This template repository was designed for personal use and is provided as-is. Whilst I endeavour to keep it up-to-date and respond to issues raised here, I can provide no guarantee of the completeness, accuracy, reliability, suitability or availability of the information, services and software contained here for your use case.*
+[3]: https://www.maxquant.org/
+
+1. Tyanova, Stefka, Tikira Temu, and Juergen Cox. “The MaxQuant Computational Platform for Mass Spectrometry-Based Shotgun Proteomics.” Nature Protocols 11, no. 12 (December 2016): 2301–19. https://doi.org/10.1038/nprot.2016.136.
