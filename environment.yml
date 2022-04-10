@@ -35,7 +35,9 @@ dependencies:
   - networkx
   - loguru
   - snakemake
+  - matplotlib-venn==0.11.6
   - pip:
+    - KEGGutils
     - xmltodict
     - py4cytoscape
     - git+https://github.com/dezeraecox/GEN_Utils.git
