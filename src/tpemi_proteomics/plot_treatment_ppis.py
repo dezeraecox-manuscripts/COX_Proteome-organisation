@@ -1,13 +1,9 @@
 """ NOTE: current versions of the py4cytoscape require cytoscape to be open and running."""
 
 import os
-import subprocess
-import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from py4cytoscape import cytoscape_system
-import seaborn as sns
 import matplotlib
 import py4cytoscape as cyto
 
@@ -46,7 +42,6 @@ def cytoscape_map_table(df, df_key='Proteins', node_key='query term'):
                          table_key_column=node_key)
     # nodes var is not automatically updated with new info
     nodes = cyto.get_table_columns()
-    return nodes
 
 
 def cytoscape_create_style(style_name, color_col, map_vals=[-1, 0, 1], map_colors=['#05008a', '#adadad', '#a80000']):
@@ -61,28 +56,10 @@ def cytoscape_create_style(style_name, color_col, map_vals=[-1, 0, 1], map_color
         table_column_values=map_vals, visual_prop_values=map_colors)  # 'p' means 'passthrough' mapping, col_vals are the extremes to map, vis_prop are the colors
     cyto.create_visual_style(style_name, defaults, [node_labels, node_color])
 
-
-# def cytoscape_create_style(style_name, color_col, map_vals=[-1, 0, 1], map_colors=['#05008a', '#adadad', '#a80000']):
-
-#     # Create new style with some mappings
-#     defaults = {'NODE_SHAPE': "circle", 'EDGE_TRANSPARENCY': 70,
-#                 'NODE_LABEL_POSITION': "W,E,c,0.00,0.00", "NODE_BORDER_WIDTH": 2, "NODE_FILL_COLOR": '#ffffff', "NODE_SIZE": 20}
-#     node_labels = cyto.map_visual_property(
-#         visual_prop='node label', table_column='display name', mapping_type='p')  # 'p' means 'passthrough' mapping
-#     node_color = cyto.map_visual_property(
-#         visual_prop='node fill color', table_column=color_col, mapping_type='c',
-#         table_column_values=map_vals, visual_prop_values=map_colors)  # 'p' means 'passthrough' mapping, col_vals are the extremes to map, vis_prop are the colors
-#     node_size = cyto.map_visual_property(
-#         visual_prop='node size', table_column='degree', mapping_type='c',
-#         table_column_values=[0, 25], visual_prop_values=[10, 250])  # 'p' means 'passthrough' mapping, col_vals are the extremes to map, vis_prop are the colors
-#     cyto.create_visual_style(style_name, defaults, [
-#                              node_labels, node_color, node_size])
-
-
 # Check cytoscape has been started
 # start_cyto = subprocess.Popen(
 #     r"C:/Program Files/Cytoscape_v3.9.0/cytoscape.exe", shell=True)
-cyto.cytoscape_ping()
+logger.info(cyto.cytoscape_ping())
 
 # Read in summary data
 protein_summary = pd.read_excel(f'{input_treated}', sheet_name='summary')
@@ -126,7 +103,7 @@ protein_summary = pd.melt(
 network_ids = {}
 tables = {}
 for treatment, df in protein_summary.groupby('treatment'):
-
+    logger.info(treatment)
     treatment_df = df[['Proteins', 'max_log2_pval_thresh']].copy()
     # Remove proteins not outside control thresholds
     treatment_df['max_log2_pval_thresh'] = treatment_df['max_log2_pval_thresh'].replace(0, np.nan)
@@ -150,7 +127,7 @@ for treatment, df in protein_summary.groupby('treatment'):
 
     tables[treatment] = interaction_degree
 
-    cytoscape_map_table(interaction_degree, df_key='protein', node_key='display name')
+    table = cytoscape_map_table(interaction_degree, df_key='protein', node_key='display name')
 
     if len(network_ids) < 1:
         # Create a new style for range of vals in peptides
@@ -174,10 +151,8 @@ for network in network_ids:
     cyto.sandbox_get_from(
         f'{network}.svg', f'{output_folder}{network}.svg')
 
-
 # Save current version, overwriting previous versions of the session!
 # copy session file from Notebook directory to workstation
 cyto.save_session('treatment_STRING_layout')
 cyto.sandbox_get_from('treatment_STRING_layout.cys',
                       f'{output_folder}treatment_STRING_layout.cys')
-
