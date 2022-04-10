@@ -27,6 +27,7 @@ rule proteomics_plot_correlations:
         'results/tpemi_proteomics/plot_correlations/complex_summary.svg',
         'results/tpemi_proteomics/plot_correlations/interactions.svg',
         'results/tpemi_proteomics/plot_correlations/cluster_correlation.svg',
+        'results/tpemi_proteomics/plot_correlations/complex_0032991.svg',
     script:
         "plot_correlations.py"
 
@@ -60,8 +61,13 @@ rule proteomics_plot_summary_ppis:
     output: 
         # 'results/tpemi_proteomics/plot_degree_ppis/degree_STRING_layout.cys',
         'results/tpemi_proteomics/plot_degree_ppis/degree_layout.cys',
-        'results/tpemi_proteomics/plot_degree_ppis/cytoscape_node_summary.csv'
-
+        'results/tpemi_proteomics/plot_degree_ppis/cytoscape_node_summary.csv',
+        'results/tpemi_proteomics/plot_degree_ppis/degree.svg',
+        'results/tpemi_proteomics/plot_degree_ppis/degree_MG132.svg',
+        'results/tpemi_proteomics/plot_degree_ppis/degree_Ver155008.svg',
+        'results/tpemi_proteomics/plot_degree_ppis/degree_Novobiocin.svg',
+        'results/tpemi_proteomics/plot_degree_ppis/degree_Staurosporine.svg',
+        'results/tpemi_proteomics/plot_degree_ppis/degree_Celastrol.svg',
     script:
         "plot_summary_ppis.py"
 
@@ -70,6 +76,7 @@ rule proteomics_plot_treatment_ppis:
     input: 
         'results/tpemi_proteomics/peptide_summary/peptide_summary.xlsx'
     output: 
-        'results/tpemi_proteomics/plot_treatment_ppis/treatment_STRING_layout.cys'
+        'results/tpemi_proteomics/plot_treatment_ppis/treatment_STRING_layout.cys',
+        'results/tpemi_proteomics/plot_treatment_ppis/MG132.svg'
     script:
         "plot_treatment_ppis.py"
