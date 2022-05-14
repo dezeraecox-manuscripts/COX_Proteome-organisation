@@ -1,13 +1,9 @@
-import os, re
+import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-from utilities.databases import  uniprot_summary, create_uniprot_xref
+from utilities.databases import  uniprot_summary
 
 from loguru import logger
-from GEN_Utils import FileHandling
 
 logger.info('Import OK')
 

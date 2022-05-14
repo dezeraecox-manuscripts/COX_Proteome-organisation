@@ -46,7 +46,7 @@ abundance_correlation = pd.pivot_table(
     values=['abundance_ratio']
 )
 abundance_correlation.columns = ['_'.join(col).strip() for col in abundance_correlation.columns.values]
-abundance_correlation = abundance_correlation.reset_index().dropna() # 83 common significantly changed instances (drug+protein) that we can compare
+abundance_correlation = abundance_correlation.reset_index().dropna()
 
 for drug, df in abundance_correlation.groupby('drug'):
     logger.info(df.corr())
@@ -81,4 +81,3 @@ sns.pairplot(
     np.log2(treatment_correlation)
 )
 
-# For each treatment, collect binary thresholded proteins --> what is the overlap in proteins that change vs those that dont for each treatment
