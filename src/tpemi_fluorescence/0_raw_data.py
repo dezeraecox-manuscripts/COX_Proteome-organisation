@@ -1,13 +1,10 @@
-import os, re
+import os
 import zipfile
-from shutil import copyfile
 import shutil
-from loguru import logger
-import json
 from contextlib import closing
 import urllib.request as request
-import requests
 
+from loguru import logger
 logger.info('Import OK')
 
 
@@ -38,11 +35,16 @@ def download_resources(filename, url, output_folder):
 
 if __name__ == "__main__":
 
-
-    output_folder = 'experimental_data/'
+    # Download raw data from repository
+    url = 'https://zenodo.org/record/6439170/files/tpemi_fluorescence.zip?download=1'
+    folder_name = 'tpemi_fluorescence'
+    output_folder = 'data/'
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
+    
+    download_resources(filename=f'{folder_name}.zip', url=url, resource_folder=output_folder) 
+    with zipfile.ZipFile(f'{output_folder}{folder_name}.zip', 'r') as zip_ref:
+        zip_ref.extractall(f'{output_folder}')
+    
 
-
-        copyfile(f'', f'{output_folder}')
