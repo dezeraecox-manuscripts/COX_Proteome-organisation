@@ -44,7 +44,6 @@ def filter_levels(summary_df, level=None, level_min=0.0, level_max=None, protein
 def plot_enrichment(filtered, colour_dict=None, filter_top=5, output_folder=False):
     # generate bar plots
 
-    # Initialize the matplotlib figure
     for (category, column), df in filtered.groupby(['search_type', 'column']):
         source = df.copy()
         source = source.sort_values(['log2_fold_enrichment'], ascending=False)
@@ -73,7 +72,6 @@ def plot_enrichment(filtered, colour_dict=None, filter_top=5, output_folder=Fals
 def plot_compiled_enrichment(filtered, colour_dict=None, filter_top=5, output_folder=False):
     # generate bar plots
 
-    # Initialize the matplotlib figure
     for column, df in filtered.groupby(['column']):
         source = df.copy()
         source = source.sort_values(['log2_fold_enrichment'], ascending=False)
@@ -127,7 +125,7 @@ if __name__ == "__main__":
     colors = {val: palette[val.split('_')[1]]
          for val in filtered_df['column'].unique().tolist()}
 
-    # test bubble chart - only those overrepresented
+    # bubble chart - only those overrepresented
     palette = { 'exposed': '#a10000', 'protected': '#063478', 'changed': '#442178'}
     treatments = ['MG132', 'Ver155008', 'Novobiocin', 'Staurosporine', 'Celastrol']
 
@@ -226,12 +224,9 @@ if __name__ == "__main__":
             x='x_order',
             y='y_order',
             color='darkgrey',
-            # hue='color',
-            # palette=palette,
             ax=ax,
             size='log2_fold_enrichment',
             sizes=(5, 500),
-            # alpha=0.5
         )
         ax_t = ax.secondary_xaxis('top')
         ax_t.set_xticklabels(x_order, rotation=90)

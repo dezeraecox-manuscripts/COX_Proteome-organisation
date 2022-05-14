@@ -28,7 +28,7 @@ nc_thresholded = pd.read_excel(input_ncthresholded, sheet_name=None)
 nc_thresholded.update({key: df.drop([col for col in df.columns.tolist(
 ) if 'Unnamed: ' in str(col)], axis=1) for key, df in nc_thresholded.items()})
 
-"""------------------------Generate summary df------------------------"""
+# """------------------------Generate summary df------------------------"""
 
 # raw_abundance
 raw_vals = normalised['raw'].copy()
@@ -66,7 +66,7 @@ summary = pd.merge(summary, pval_vals, on=['Sequence', 'Proteins', 'treatment'],
 
 # pval_smooth - noncys
 pval_vals = nc_thresholded['pval_smooth'].copy()
-pval_vals['Proteins'] = pval_vals['Sequence'] # fix issue with taking mean of nc per protein
+pval_vals['Proteins'] = pval_vals['Sequence']
 pval_vals.dropna(inplace=True)  # remove peptides which were not quantified
 pval_vals['TPE_thresholded'] = [val if thresh == 1 else 0 for  thresh, val in pval_vals[['TPE_thresholded', 'log2_mean_ratio']].values]
 pval_vals = pval_vals[['Proteins', 'treatment', 'log2_mean_ratio', 'TPE_thresholded']]
@@ -84,8 +84,7 @@ summary = pd.merge(summary, sign_vals, on=['Sequence', 'Proteins', 'treatment'],
 
 """------------------------Assign common changes------------------------"""
 
-# collect peptides identified in all treatments of interest for measure of interest - currently using pval smoothed dataset
-# currently using ------"""pval smoothed"""------ dataset, alternative is log2_thresh_significant_ratio
+# collect peptides identified in all treatments of interest for measure of interest
 treatments = ['MG132', 'Celastrol', 'Ver155008', 'Novobiocin', 'Staurosporine']
 per_peptide = pd.pivot_table(summary.copy(), index=['Sequence', 'Proteins'], columns='treatment', values='log2_thresh_pval_ratio')
 
@@ -100,9 +99,9 @@ binary_peptides[treatments] = np.where(binary_peptides[treatments].isnull(), 0, 
 binary_peptides['num_changed'] = binary_peptides.sum(axis=1)
 
 
-# Produce summary measure per protein --> explore mean, max and simple binary measures
+# Produce summary measure per protein --> mean, max and simple binary measures
 mean_proteins = per_peptide.reset_index().copy().groupby(
-    'Proteins').mean().dropna()  # select only proteins quantified in all treatments.dropna()  # select only proteins quantified in all treatments
+    'Proteins').mean().dropna()  # select only proteins quantified in all treatments
 
 binary_proteins = mean_proteins.copy()
 binary_proteins[treatments] = np.where(binary_proteins[treatments].replace(0, np.nan).isnull(), 0, 1)

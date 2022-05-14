@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import numpy as np
-from scipy import stats
 
 from GEN_Utils import FileHandling
 
@@ -36,16 +35,12 @@ def distribution_z_threshold(data, z_val=1.96):
     return np.mean(data) - range_val, np.mean(data) + range_val
 
 def main(input_path, thresholds_path, output_folder, z_val=1.96):
-    # --------------------Read in raw data--------------------
-    # Read in stress dataframes - either using pval_smooth data or significant_changes datasets
-    # in the case of significant changes dataset, this is prefiltered for peptides identified in all stresses, therefore "1" result refers to those quantified but non-significant changes --> values were then logged, so 0 is non-significant change
-    # in the case of the pval_smoothed result, these are also logged and non-quantified values removed (although there is no value setting i.e. no change is not determined, only scaled)
+
     raw_data = pd.read_excel(f'{input_path}', sheet_name=None)
     raw_data.update({key: df.drop([col for col in df.columns.tolist() if 'Unnamed: ' in col], axis=1) for key, df in raw_data.items()})
 
     # ---------------------Calculate CIs, apply as threshold---------------------
-    # Calculate C.I. thresholds for the control TPE-positive and TPE-negative samples under all smoothing strategies
-    # calculate CIs
+    # Calculate C.I. thresholds for the control TPE-positive and TPE-negative samples 
     if input_path == thresholds_path:
         CIs = []
         for data_type, df in raw_data.items():
@@ -107,7 +102,7 @@ if __name__ == '__main__':
     thresholds_path = 'results/tpemi_proteomics/baseline/significance/cys_scaled_summary.xlsx'
     main(input_path, thresholds_path, output_folder=f'{output_folder}', z_val=1.96)
 
+    # process noncys smoothed values
     input_path = 'results/tpemi_proteomics/significance/noncys_scaled_summary.xlsx'
     thresholds_path = 'results/tpemi_proteomics/baseline/significance/noncys_scaled_summary.xlsx'
-    # process noncys smoothed values
     main(input_path, thresholds_path, output_folder=f'{output_folder}noncys_', z_val=1.96)

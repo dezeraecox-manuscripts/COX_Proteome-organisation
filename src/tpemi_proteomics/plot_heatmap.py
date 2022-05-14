@@ -1,12 +1,11 @@
 
-import os, functools
+import os
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
-from GEN_Utils import FileHandling
 from loguru import logger
 
 logger.info("Import ok")

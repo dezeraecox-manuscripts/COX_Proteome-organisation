@@ -64,7 +64,6 @@ pathway_names = dict(feature_data[['ko_pathway_term', 'name']].values)
 
 # assign proteins into pathways
 for pathway_name, df in feature_data.groupby('ko_pathway_term'):
-    # pathway_name = 'mmu04120'
     pathway_proteins = feature_data[feature_data['ko_pathway_term'] == pathway_name]['Proteins'].unique().tolist()
 
     pathway_correlations['pathway_A'] = [1 if protein in pathway_proteins else 0 for protein in pathway_correlations['Proteins']]

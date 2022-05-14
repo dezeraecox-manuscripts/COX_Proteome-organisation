@@ -2,13 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 
-from GEN_Utils import FileHandling
-
 from loguru import logger
 logger.info("Import OK")
-
-
-## Cleanup raw MQ data to generate peptide and protein information
 
 
 def mq_peptides(input_path, sample_names=None, pep_cols=[], quant_col='Reporter intensity corrected'):
@@ -41,7 +36,6 @@ def mq_peptides(input_path, sample_names=None, pep_cols=[], quant_col='Reporter 
         sample_cols = [col for col in sample_df.columns.tolist(
         ) if f'{quant_col} {sample}' in col]
         # filter those without any values for value in variable:
-        # In theory (and in previous MQ cleanup), drop any peptides with any missing values here? To start with better to only drop ones that are all missing
         sample_df = sample_df.replace(0, np.nan).dropna(
             axis=0, how='all', subset=sample_cols)
         sample_df = sample_df[standard_cols + sample_cols]
@@ -114,7 +108,7 @@ def mq_cleaner(input_folder, output_path, sample_names=None, proteins_file='prot
     cleaned_peptides = compiler(cleaned_peptides, quant_col, quant_name)
     cleaned_proteins = compiler(cleaned_proteins, quant_col, quant_name)
 
-    #save to individual excel spreadsheets
+
     cleaned_peptides.to_csv(f'{output_folder}cleaned_peptides.csv')
     cleaned_proteins.to_csv(f'{output_folder}cleaned_proteins.csv')
     

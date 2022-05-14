@@ -22,22 +22,22 @@ ontologies = {}
 # ----Collect specific complexes based on gene ontology terms----
 
 # Test 3: Against proteins associated with proteasome
-potential_proteasome_terms = ontology_wordfinder(['proteasome']) # decided on "GO:0000502: proteasome complex"
+potential_proteasome_terms = ontology_wordfinder(['proteasome']) # "GO:0000502: proteasome complex"
 ontology_genes = uniprot_go_genes(tax_id='10090', go_term='GO:0000502', child_terms=False, direct=True, output='list')
 ontologies['proteasome_GO0000502'] = pd.DataFrame(ontology_genes)
 
 # Test 4: Against proteins associated with ribosome
-potential_terms = ontology_wordfinder(['ribosome']) # decided on "GO:0003735 structural constituent of ribosome""
+potential_terms = ontology_wordfinder(['ribosome']) # "GO:0003735 structural constituent of ribosome""
 ontology_genes = uniprot_go_genes(tax_id='10090', go_term='GO:0003735', child_terms=False, direct=True, output='list')
 ontologies['ribosome_GO0003735'] = pd.DataFrame(ontology_genes)
 
 # Test 5: Against proteins associated with DNA repair complex
-potential_terms = ontology_wordfinder(['DNA repair complex']) # decided on "GO:1990391 DNA repair complex""
+potential_terms = ontology_wordfinder(['DNA repair complex']) # "GO:1990391 DNA repair complex""
 ontology_genes = uniprot_go_genes(tax_id='10090', go_term='GO:1990391', child_terms=False, direct=True, output='list')
 ontologies['DNArepair_GO1990391'] = pd.DataFrame(ontology_genes)
 
 # Test 6: Against proteins associated with nuclear pore
-potential_terms = ontology_wordfinder(['nuclear pore']) # decided on "GO:0005643 Nuclear pore"
+potential_terms = ontology_wordfinder(['nuclear pore']) # "GO:0005643 Nuclear pore"
 ontology_genes = uniprot_go_genes(tax_id='10090', go_term='GO:0005643', child_terms=True, direct=False, output='list')
 ontologies['nuclearpore_GO0005643'] = pd.DataFrame(ontology_genes)
 
@@ -45,7 +45,6 @@ ontologies['nuclearpore_GO0005643'] = pd.DataFrame(ontology_genes)
 # getting all direct descendants of the generic "protein-containing complex" term
 go_terms = go_lineage_tracer('GO:0032991', obo_path=f'{resource_folder}PANTHERGOslim.obo', alt_ids=True, direct=False)
 details = go_term_details(go_terms, obo_path=f'{resource_folder}PANTHERGOslim.obo')
-# this is a good start: 210 terms is comparable to the 279 annotated complexes in the Ori database
 
 # collect genes annotated with these GO terms
 go_complexes = {}

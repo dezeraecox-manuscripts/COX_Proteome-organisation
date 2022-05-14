@@ -47,7 +47,7 @@ protein_corr['cluster_B'] = protein_corr['Protein_B'].map(
 ppi_clusters = dict(protein_corr[['Protein_A', 'cluster_A']].values)
 
 
-# Test average correlation for all members of a cluster with proteins inside cluster, versus outside cluster - i.e.
+# Test average correlation for all members of a cluster with proteins inside cluster, versus outside cluster
 protein_corr['corr_type'] = [1 if clust_a == clust_b else 0 for clust_a, clust_b in protein_corr[['cluster_A', 'cluster_B']].values]
 
 mean_comparisons = []

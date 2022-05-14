@@ -12,7 +12,6 @@ import numpy as np
 import obonet
 import pandas as pd
 import requests
-# import xmltodict
 from GEN_Utils import FileHandling
 from loguru import logger
 import time

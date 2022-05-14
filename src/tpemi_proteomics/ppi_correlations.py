@@ -52,7 +52,6 @@ protein_corr = pd.melt(
     value_name='corr_val',
 )
 protein_corr['key'] = [f'{prot_a}_{prot_b}' if prot_a < prot_b else f'{prot_b}_{prot_a}' for prot_a, prot_b in protein_corr[['Proteins', 'Protein_B']].values]
-# protein_corr.drop_duplicates(subset='key', inplace=True)
 protein_corr = protein_corr[protein_corr['Proteins'] != protein_corr['Protein_B']]
 
 

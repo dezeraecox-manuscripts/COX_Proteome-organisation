@@ -17,9 +17,6 @@ confidence_threshold = 0.4
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-
-# As collecting all PPIs for all proteins can be tricky, and potentially not useful in this case, restricted to all direct PPI between proteins which were quantified here i.e. no first-shell interactions
-
 # -----Read in peptides data for all proteins identified-----
 
 raw_data = pd.read_excel(f'{input_path}', sheet_name='cys_peptides')
@@ -30,7 +27,7 @@ string_map = create_uniprot_xref(resource_folder, tax_id='10090', gene_ids=[], i
 string_map = dict(string_map[['UniProtKB-AC', 'ID']].values)
 string_ids = [string_map[gene] for gene in proteins if gene in list(string_map.keys()) ]
 
-# Colect all network interactions - remember limit is 2000 genes?
+# Colect all network interactions - remember limit is 2000 genes
 interactions = network_interactions(genes=string_ids, tax_id='10090', id_type='string')
 
 # Add back original gene IDs based on mapping

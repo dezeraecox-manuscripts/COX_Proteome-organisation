@@ -37,7 +37,7 @@ def coverage_filter(compiled, channel_threshold):
     """Drop peptides with < threshold coverage"""
     df = compiled.copy()
     df['coverage'] = df[sample_cols].count(axis=1)
-    return df[df['coverage'] >= channel_threshold] # 458 peptides covering 265 proteins
+    return df[df['coverage'] >= channel_threshold]
 
 
 def replicate_filter(compiled, replicate_threshold):
@@ -45,14 +45,14 @@ def replicate_filter(compiled, replicate_threshold):
     df = compiled.copy()
     replicates = df.groupby('Sequence').count()['Proteins']
     rep_sequences = replicates[replicates == replicate_threshold].reset_index()['Sequence']
-    return df[df['Sequence'].isin(rep_sequences)] # 92 proteins, covered by 125 peptides in three replicates
+    return df[df['Sequence'].isin(rep_sequences)]
 
 
 def significance_filter(compiled, test_results, threshold=0.05):
     """Collects peptides containing at least one significant sample from long-form ttest results and filters from compiled df"""
     
     ttest_results = one_sample_ttest(compiled, sample_cols)
-    sig_peptides = list(set(ttest_results[ttest_results['p-val'] < threshold]['Sequence'])) # 519 peptides
+    sig_peptides = list(set(ttest_results[ttest_results['p-val'] < threshold]['Sequence']))
     
     return compiled[compiled['Sequence'].isin(sig_peptides)]
 
@@ -102,7 +102,6 @@ def ewm_smoothing(compiled, max_smooth, min_smooth=2, plot=False):
         for_smoothing['channel'] = for_smoothing['channel'].astype(int)
         for_smoothing['Sequence'] = sequence
         for_smoothing = for_smoothing.sort_values('channel')
-        # sns.lineplot(data=for_smoothing, x='channel', y='ratio',  ci='sd', label='raw')
         for smooth_factor in np.arange(min_smooth, max_smooth):
             for_smoothing[f'EMA_{smooth_factor}'] = for_smoothing.loc[:,'ratio'].ewm(com=smooth_factor, adjust=True).mean()
             if plot:
@@ -110,7 +109,6 @@ def ewm_smoothing(compiled, max_smooth, min_smooth=2, plot=False):
         if plot:
             plt.title(f'{sequence} - com')
             plt.legend(bbox_to_anchor=(1.0, 1.0))
-            # plt.ylim(0, 2)
             plt.show()
         smooth.append(for_smoothing)
     smooth = pd.concat(smooth)
@@ -119,7 +117,7 @@ def ewm_smoothing(compiled, max_smooth, min_smooth=2, plot=False):
 
 
 def loess_smoothing(dataframe, degrees=(2, 5), plot=False, v=None):
-    # testing custom LOWESS method
+    #  custom LOWESS method
     def loc_eval(x, b):
         loc_est = 0
         for i in enumerate(b): loc_est+=i[1]*(x**i[0])
@@ -189,7 +187,6 @@ def loess_smoothing(dataframe, degrees=(2, 5), plot=False, v=None):
             plt.title(sequence)
             plt.legend()
             plt.tight_layout()
-            # plt.savefig(f'{output_folder}degree_3/{sequence}.png')
             plt.show()
             plt.clf()
 

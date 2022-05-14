@@ -31,7 +31,6 @@ def main(input_path, output_folder, sheet_name='cys_noncys_peptides'):
     protein_map = dict(raw.reset_index()[['Sequence', 'Proteins']].values)
     info_cols = ['Sequence', 'Proteins', 'sample_name', 'replicate']
     sample_cols = list(dict.fromkeys([col for col in compiled.columns.tolist() if col not in info_cols]))
-    # population_plot(raw, sample_cols, 'raw_data', (0, 2))
 
     """--------------SIGNIFICANCE FILTERING-----------------------"""
     # Complete standard one-sample t-test to identify sig. diff from 1
@@ -40,20 +39,18 @@ def main(input_path, output_folder, sheet_name='cys_noncys_peptides'):
     compiled_pvals.columns = [col for _, col in compiled_pvals.columns.tolist()]
     
     significant_changes = compiled.groupby(['Sequence']).mean().dropna()[sample_cols].copy()
-    significant_changes = significant_changes.where(compiled_pvals < 0.05).fillna(1) # as droped NA during mean to highlight only peptides quantified in all samples, then fillna here replaces non-significant peptides with 1 (as these were quantified but not signficantly different to 1)
+    significant_changes = significant_changes.where(compiled_pvals < 0.05).fillna(1)
 
     significant_changes['Proteins'] = significant_changes.reset_index()['Sequence'].map(protein_map).tolist()
     significant_changes[sample_cols] = np.log2(significant_changes[sample_cols])
 
     """ ------------------PVAL SCALING------------------"""
-    # """----> scaling here is an issue - in the previous example, we scaled according to the min and max of a longitudinal trace. Here, this doesn't make sense and a log approach would be more appropriate. Therefore, log first and compare to popmean of 0?"""
     log_compiled = compiled.copy()
     log_compiled[sample_cols] = np.log2(log_compiled[sample_cols])
     pval_smooth = sms.pval_smoothing(log_compiled, sample_cols, center=0)
     # Add back protein info, remove unnecessary columns
     pval_smooth.reset_index(inplace=True)
     pval_smooth['Proteins'] = pval_smooth['Sequence'].map(protein_map)
-    # pval_smooth = pval_smooth[['Sequence', 'Proteins']+ sample_cols].dropna() # remove peptides not quantified in all samples
 
     # save original and processed data to excel
     data_dict = {'raw': raw, 'pval_smooth': pval_smooth, 'significant_changes': significant_changes}

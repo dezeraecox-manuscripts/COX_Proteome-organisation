@@ -61,7 +61,6 @@ palette = {
 }
 
 
-# fig, ax = plt.subplots(figsize=(5, 8))
 fig = sns.lmplot(
     data=for_plotting,
     x='degree',
@@ -100,7 +99,6 @@ corr_df['cluster'] = corr_df['Proteins'].map(ppi_clusters)
 treatment_corr = corr_df[treatments].corr()
 # Draw the heatmap
 g = sns.clustermap(treatment_corr, center=0, cmap="vlag",
-                #    row_colors=network_colors, col_colors=network_colors,
                    dendrogram_ratio=(.1, .2),
                    cbar_pos=(.02, .32, .03, .2),
                    linewidths=.75, figsize=(12, 13))
@@ -193,7 +191,6 @@ sns.boxplot(
     palette=palette,
     fliersize=0
 )
-# plt.setp(ax.artists, facecolor='w')
 sns.stripplot(
     data=for_plotting,
     x='complex_id',

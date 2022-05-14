@@ -134,10 +134,6 @@ def caldera_plot(df, x='log2_mean_noncys_ratio', y='log2_pval_ratio', xthreshold
         plt.savefig(f'{output_folder}{title}.svg')
 
 
-    # plt.show()
-
-
-
 # Visualise Caldera plot --> using pval smoothed values without thresholding (to show distribution of values within threshold)
    
 for treatment_name in ['TPE', 'NOTPE']:
@@ -206,7 +202,6 @@ plt.ylabel('Density')
 for threshold in cys_thresholds:
     ax.axvline(threshold, color='firebrick', linestyle='--')
 plt.legend(bbox_to_anchor=(1.0, 1.0))
-# plt.xlim(-2.5, 2.5)
 plt.savefig(f'{output_folder}distribution_TPE_cys.svg')
 
 # NonCys
@@ -232,5 +227,4 @@ plt.ylabel('Density')
 for threshold in noncys_thresholds:
     ax.axvline(threshold, color='firebrick', linestyle='--')
 plt.legend(bbox_to_anchor=(1.0, 1.0))
-# plt.xlim(-2.5, 2.5)
 plt.savefig(f'{output_folder}distribution_TPE_noncys.svg')

@@ -38,7 +38,7 @@ def find_pathway_genes(pathway_ids, tax_id='10090', resource_folder='resources/b
     """
     # Generate orthology database
     uniprot = uniprot_summary(tax_id=tax_id, resource_folder=resource_folder, genes=[], reviewed=True)
-    keggo = create_uniprot_xref(input_path=resource_folder, tax_id=tax_id, gene_ids=[], id_type=None) # note some non-unique keys here...
+    keggo = create_uniprot_xref(input_path=resource_folder, tax_id=tax_id, gene_ids=[], id_type=None)
     keggo = keggo[keggo['ID_type'] == 'KEGG']
     uniprot['KEGG_id'] = uniprot['Entry'].map(dict(keggo[['UniProtKB-AC', 'ID']].values))
     kegg_id_map = dict(uniprot[['KEGG_id', 'Entry']].values)
